@@ -23,6 +23,10 @@ module.exports.pitch = function(request) {
 			outputOptions[name] = this.options.worker.output[name];
 		}
 	}
+	var urlPrefix = '';
+	if (this.options && this.options.worker && this.options.worker.urlPrefix) {
+		urlPrefix = this.options.worker.urlPrefix + '/';
+	}
 	var workerCompiler = this._compilation.createChildCompiler("worker", outputOptions);
 	workerCompiler.apply(new WebWorkerTemplatePlugin(outputOptions));
 	workerCompiler.apply(new SingleEntryPlugin(this.context, "!!" + request, "main"));
@@ -43,7 +47,7 @@ module.exports.pitch = function(request) {
 		if(err) return callback(err);
 		if (entries[0]) {
 			var workerFile = entries[0].files[0];
-			var constructor = "new Worker(__webpack_public_path__ + " + JSON.stringify(workerFile) + ")";
+			var constructor = "new Worker(__webpack_public_path__ + " + JSON.stringify(urlPrefix + workerFile) + ")";
 			if(query.inline) {
 				constructor = "require(" + JSON.stringify("!!" + path.join(__dirname, "createInlineWorker.js")) + ")(" +
 					JSON.stringify(compilation.assets[workerFile].source()) + ", __webpack_public_path__ + " + JSON.stringify(workerFile) + ")";

@@ -44,6 +44,16 @@ let o = {foo: 'foo'}
 _.has(o, 'foo') // true
 ```
 
+## Configuration
+
+This fork allows for a custom URL prefix to be specified:
+
+```
+worker: {
+  urlPrefix: '/build'
+},
+```
+
 ## License
 
 MIT (http://www.opensource.org/licenses/mit-license.php)
